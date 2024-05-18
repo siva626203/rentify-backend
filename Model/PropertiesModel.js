@@ -1,5 +1,5 @@
 const mongoose=require('mongoose')
-const PropertiesSchema = mongoose.Schema({
+const PropertiesSchema =new mongoose.Schema({
   name: { type: String, required: true },
   place: { type: String, required: true },
   area: { type: String, required: true },
@@ -8,7 +8,8 @@ const PropertiesSchema = mongoose.Schema({
   hospitals: { type: String, required: true },
   colleges: { type: String, required: true },
   price: { type: Number, required: true },
-  seller: { type: mongoose.ObjectId, required: true },
+  images:{type:Array},
+  seller: { type: mongoose.ObjectId,ref:'Users', required: true },
 });
 
 var PropertiesModel;

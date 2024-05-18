@@ -1,12 +1,20 @@
-const jwt=require('json-web-token')
-const JwtAuth=(req,res,next)=>{
+const Validate=require('../helpers/token')
+exports.JwtAuth=async(req,res,next)=>{
     try {
-        const Auth = jwt.verify(token, process.env.JWT_SECRET);
-        if(Auth){
-            next()
+        if(req.headers["authorization"]){
+             const headerToken = req.headers["authorization"];
+             const token = headerToken.split(" ");
+             if (Validate.validate(token[1]) === "Wrong Token") {
+               res.send({ message: "token invalid" });
+             } else {
+               next();
+             }
+        }else{
+            res.send({message:"thsi API required Token"})
         }
-    } catch (error) {
+       
         
+    } catch (error) {
+        throw error
     }
 }
-export default JwtAuth
