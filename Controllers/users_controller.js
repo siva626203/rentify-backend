@@ -10,7 +10,7 @@ exports.user_create = async (req, res) => {
     const user = await Users.create(req.body);
     res.send({ message: "user created", data: user })
   } catch (error) {
-    res.send({message:error.message});
+    res.status(401).send({message:error.message});
   }
 };
 exports.user_login = async (req, res) => {
@@ -28,7 +28,7 @@ exports.user_login = async (req, res) => {
       const token = Jwt.token(user.email);
       res.send({ message: "user logged", data: user, token });
     } else {
-      res.send({ message: "wrong password" });
+      res.status(401).send({ message: "wrong password" });
     }
    
   } catch (error) {
@@ -44,7 +44,7 @@ exports.user_update = async (req, res) => {
     if (user.acknowledged) res.send({ message: "user updated", data: user });
     else return res.send({message:"field not found"})
   } catch (error) {
-   res.send({ message: error.message });
+   res.status(401).send({ message: error.message });
   }
 };
 exports.user_delete = async (req, res) => {
@@ -54,6 +54,6 @@ exports.user_delete = async (req, res) => {
    const User = await Users.deleteOne({ _id: id });
    res.send({ message: "User deleted", data: User });
  } catch (error) {
-   res.send({ message: error.message });
+   res.status(401).send({ message: error.message });
  }
 };

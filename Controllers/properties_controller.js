@@ -15,7 +15,7 @@ exports.property_filter = async (req, res) => {
   Connect();
   try {
     if(req.params['id']){
-        const Property = await Properties.find({_id:req.params['id']}).populate('seller');
+        const Property = await Properties.find({seller:req.params['id']}).populate('seller');
         res.send({ message: "Property fetched", data: Property });
     }
   } catch (error) {
@@ -25,7 +25,8 @@ exports.property_filter = async (req, res) => {
 exports.property_get = async (req, res) => {
   Connect();
   try {
-   const Property = await Properties.find({}).populate('seller');
+   const Property = await Properties.find({}).populate("seller");
+   
    res.send({ message: "All Properties fetched", data: Property });
   } catch (error) {
     console.log(error);
@@ -36,8 +37,14 @@ exports.property_update = async (req, res) => {
   Connect();
   try {
     const id=req.params['id']
-    const Property = await Properties.updateOne({_id:id,},req.body);
-    res.send({ message: "Property updated", data: Property });
+    console.log(req.body)
+    const result = await Properties.updateOne({ _id: id }, req.body);
+    if (result.nModified === 0) {
+      return res
+        .status(404)
+        .send({ message: "Property not found or data not modified" });
+    }
+    res.send({ message: "Property updated", data: result });
   } catch (error) {
     console.log(error);
     res.send({ message: error.message });

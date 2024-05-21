@@ -5,12 +5,12 @@ exports.JwtAuth=async(req,res,next)=>{
              const headerToken = req.headers["authorization"];
              const token = headerToken.split(" ");
              if (Validate.validate(token[1]) === "Wrong Token") {
-               res.send({ message: "token invalid" });
+               res.status(401).send({ message: "token invalid" });
              } else {
                next();
              }
         }else{
-            res.send({message:"thsi API required Token"})
+            res.status(401).send({message:"thsi API required Token"})
         }
        
         
